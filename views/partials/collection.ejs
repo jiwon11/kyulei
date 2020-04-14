@@ -1,0 +1,186 @@
+<div class="container-fluid h-100">
+    <%- include('./addWebsiteModal');%>
+    <%- include('./editWebsiteModal');%>
+    <div class="row justify-content-center mx-auto h-100">
+      <div class="col-md-2 sidebar">
+          <div class="ui vertical text menu">
+              <div class="header item">My Collections</div>
+              <% userCollectionList.forEach((collection) => { %>
+                  <a class="item" href="/collections/<%= collection.id %>">
+                    <%= collection.name %>
+                    <%//<div class="ui mini red basic label">1 +</div>%>
+                  </a>
+              <% }); %>
+              <button id="addCollecBtn" class="fluid ui mini button">
+                <i class="add icon"></i>
+                Collections
+              </button>
+              <div class="collectionName text-right" id="collectionName">
+                  <div class="collectionName input-group">
+                    <input type="text" class="form-control" placeholder="Name" id="colNameInp">
+                  </div>
+                  <div>
+                      <button class="ui mini green button" id="colNamePostBtn">OK</button>
+                      <button class="ui mini button" id="colNameCancelBtn">Cancel</button>
+                  </div>
+              </div>
+          </div>
+          <div class="ui vertical text menu">
+            <div class="header item">Canlendar</div>
+              <div class="ui calendar" id="today_calendar">
+                <div class="ui input left icon">
+                  <i class="calendar icon"></i>
+                  <input type="text" placeholder="Date" id="today_calender_inp">
+                </div>
+                <a class="item" href="/calendar/<%=collection.name%>&<%=collection.id%>">
+                  See more...
+                </a>
+              </div>
+          </div>
+          <div class="ui vertical accordion text menu">
+            <div class="active item">
+              <div class="active title">
+                <i class="dropdown icon"></i>
+                <b>Events</b>
+              </div>
+              <div class="active content">
+                <a class="item">
+                  event
+                </a>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="collection head">
+          <h2 class="ui header">
+            <%= collection.name%>
+            <input type="hidden" value="<%=collection.id%>" id="collectionId">
+            <form name="delete-collection"action="/collections/<%= collection.id %>/delete" method="post">
+              <input type="hidden" name="id" value="<%=collection.id%>">
+              <button class="ui mini right floated negative compact basic button" id="collection_delete" onClick="document.forms['delete-collection'].submit();">Delete</button>
+          </form>
+          </h2>
+          <div class="ui horizontal bulleted link list">
+            <a class="item">
+              <%if(collection.private===false){%>
+                <div class="sub header"><i class="lock icon"></i>private</div>
+              <%}else{%>
+                <div class="sub header"></div><i class="unlock icon"></i>public</div>
+              <%}%>
+              </a>
+            <a class="item">
+                <%=collection.posts.length%> posts
+            </a>
+          </div>
+          <div class="urlList">
+            <div class="urlarea">
+              <button class="ui mini compact icon top left pointing dropdown button" id="AddwebsiteBtn">
+                  <i class="plus icon"></i>
+              </button>
+              <% if(collection.crawlsets.length === 0 && collection.rsssets.length === 0) {%>
+                <p><i class="angle left icon"></i> 왼쪽의 추가 버튼으로 웹사이트 정보를 추가하세요.</p>
+              <%}else{%>
+                <% collection.crawlsets.forEach((crwalset) => { %>
+                  <p class="crwalset">
+                    <i class="globe icon"></i>
+                    <a class="editSite_crwalset" href=""><%=crwalset.url%></a>
+                    <input class="crwalsetId" type="hidden" value="<%=crwalset.id%>">
+                    <input class="crwalsetUrl" type="hidden" value="<%=crwalset.url%>">
+                    <input class="crwalsetSelec" type="hidden" value="<%=crwalset.selector%>">
+                  </p>
+                <%});%>
+                <% collection.rsssets.forEach((rssset) => { %>
+                  <p class="rssset">
+                    <i class="rss square icon"></i>
+                    <a class="editSite_rss" href=""><%=rssset.url%></a>
+                    <input class="rsssetId" type="hidden" value="<%=rssset.id%>">
+                    <input class="rsssetUrl" type="hidden" value="<%=rssset.url%>">
+                  </p>
+                <%});%>
+              <%}%>
+            </div>
+          </div>
+        </div>
+        <% if(collection.crawlsets.length===0 && posts.length>0){ %>
+          <div class="crawlsetsWarning">
+            <div class="ui negative icon message">
+              <i class="times circle icon"></i>
+              <i class="close icon"></i>
+              <div class="content">
+                <div class="header">
+                  웹사이트 정보 없음.
+                </div>
+                <ul class="list">
+                  <li>웹사이트 정보가 없어 새로운 글을 불러 올 수 없습니다.</li>
+                  <% if(posts.length>0){ %>
+                    <li>기존에 추가했던 웹사이트 정보를 통해 얻은 글은 남아 있습니다.</li>
+                  <%}%>
+                </ul>
+              </div>
+            </div>
+          </div>
+        <%}%>
+        <% if(Crawl_error.length>0){ %>
+          <div class="crawlsetsWarning">
+            <%Crawl_error.forEach((error) =>{%>
+            <div class="ui negative icon message">
+              <input type="hidden" class="errorId" value="<%=error.id%>">
+              <i class="times circle icon"></i>
+              <i class="close icon"></i>
+              <div class="content">
+                <div class="header">
+                  <% var updated = error.error_keyword.split(':')[1];%>
+                  <%=updated%>일 동안 새 글이 없습니다.
+                </div>
+                <ul class="list">
+                  <li><%=error.createdAt%>부터 이전 글이 불러와 집니다.</li>
+                  <li><%=error.crawlset.url%>의 selector에 문제가 있을 수 있습니다.</li>
+                </ul>
+              </div>
+            </div>
+            <%});%>
+          </div>
+        <%}%>
+        <% if(posts.length>0){ %>
+        <div class="collection post" id="collectionPost">
+            <div class="ui divided items">
+              <% posts.forEach((post) => { %>
+                <div class="item">
+                  <div class="ui small rounded image">
+                    <img src="<%=post.image%>" onerror="this.src='../image/loading.gif'">
+                  </div>
+                  <div class="content">
+                    <a class="header" href="<%=post.url%>" target="_blank"><%=post.title%></a>
+                    <div class="extra">
+                      <span class="site"><%=post.site%></span>
+                    </div>
+                    <div class="meta">
+                      <span class="updated_time"><%=post.updated_time%></span>
+                    </div>
+                    <div class="description">
+                      <p><%=post.description.substring(0,300)%></p>
+                    </div>
+                  </div>
+                </div>
+              <%});%>
+            </div>
+            <div class="ui center aligned header" id="postSeeMore">
+              <i class="angle down icon"></i>
+              See More
+            </div>
+        </div>
+        <%}else{%>
+          <div class="collection post">
+            <h1 class="ui center aligned header">No Posts!!</h1>
+          </div>
+        <%}%>
+      </div>
+      <div class="col-md-2">
+          <div class="recommend">
+            <h3 class="ui header">Recommend</h3>
+            <p>추후 추가</p>
+          </div>
+      </div>
+  </div>
+</div>

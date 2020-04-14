@@ -1,0 +1,52 @@
+<div class="ui fullscreen modal addwebsite">
+  <i class="close icon"></i>
+  <div class="header">
+    Add Website
+  </div>
+  <div class="content">
+    <div class="row mx-auto">
+      <div class="col-md-9 col-md-push-3">
+          <iframe id="inputSite" sandbox="allow-same-origin">
+
+          </iframe>
+      </div>
+      <div class="col-md-3 col-md-pull-9 websiteInfor">
+        <div class="description">
+            <div class="ui form">
+                <div class="field">
+                  <label>URL</label>
+                  <div class="ui left action left input">
+                    <div class="ui basic floating dropdown button" id="selectTypeUrl">
+                      <div class="text"></div>
+                      <i class="dropdown icon"></i>
+                    </div>
+                    <input id="url" name="url" type="text" placeholder="URL"/>
+                  </div>
+                  <input class="ui mini right floated compact button" id="InputSiteBtn" type="button" value="Input site"/>
+                </div>
+                <div class="field" id="selectorField">
+                    <label>Selector <span id="selectorLength"></span>/500</label></label>
+                    <div class="ui input" id="selectorResultpar">
+                      <textarea id="selectorResult" name="selector" rows="2"></textarea>
+                    </div>
+                    <input class="ui mini right floated compact button" id="SelecInspect" type="submit" value="Inspect"/>
+                </div>
+                <div class="field" id="selectorInspectField">
+                  <label id="selectorInspect">Selector Inspect</label>
+                  <!--
+                  <div>
+                    <label>Title</label> : <span id="selectorTitle"></span>
+                  </div>
+                  -->
+                  <div>
+                    <label>Url</label> : <a target="_blank" id="selectorUrl"></a>
+                  </div>
+                </div>
+                <input class="ui mini right floated compact button" id="InputSelecCancelBtn" type="button" value="Cancel"/>
+                <input class="ui mini right floated compact disabled button" id="InputSelecBtn" type="submit" value="OK"/>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

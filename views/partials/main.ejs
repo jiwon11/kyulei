@@ -1,0 +1,99 @@
+<div class="container-fluid h-100">
+  <div class="row justify-content-center mx-auto">
+    <div class="col-md-2 sidebar h-100">
+        <div class="ui vertical text menu">
+            <div class="header item">My Collections</div>
+            <% collections.forEach((collection) => { %>
+                <a class="item" href="/collections/<%= collection.id %>">
+                  <%= collection.name %>
+                  <%//<div class="ui mini red basic label">1 +</div>%>
+                </a>
+            <% }); %>
+            <button id="addCollecBtn" class="fluid ui mini button">
+              <i class="add icon"></i>
+              Collections
+            </button>
+            <div class="collectionName text-right" id="collectionName">
+                <div class="collectionName input-group">
+                  <input type="text" class="form-control" placeholder="Name" id="colNameInp">
+                </div>
+                <div>
+                    <button class="ui mini green button" id="colNamePostBtn">OK</button>
+                    <button class="ui mini button" id="colNameCancelBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+      <div class="postList">
+        <h1 class="ui center aligned header"><%=user.nick%></h1>
+        <h2 class="ui horizontal left aligned divider header">
+          <i class="archive icon"></i>
+          Collections
+        </h2>
+        <div class="ui big relaxed divided list">
+          <% collections.forEach((collection) => { %>
+            <div class="item">
+              <i class="large folder middle aligned icon"></i>
+              <div class="content">
+                <div class="header">
+                  <a href="/collections/<%= collection.id %>"><%= collection.name %></a>
+                </div>
+                <div class="ui horizontal bulleted link list">
+                  <a class="item">
+                    <div class="description"><%=collection.posts.length%> Posts</div>
+                  </a>
+                  <a class="item">
+                    <%var createdTime = new Date(collection.createdAt).toDateString();%>
+                    <div class="description"><%=createdTime%></div>
+                  </a>
+                  <a class="item">
+                    <%if(collection.private===false){%>
+                      <div class="description"><i class="lock icon"></i>private</div>
+                    <%}else{%>
+                      <div class="description"><i class="unlock icon"></i>public</div>
+                    <%}%>
+                  </a>
+                </div>
+              </div>
+            </div>
+          <% }); %> 
+        </div>
+        <h2 class="ui horizontal left aligned divider header">
+          <i class="calendar alternate icon"></i>
+          Calendars
+        </h2>
+        <div class="ui big relaxed divided list">
+          <% collections.forEach((collection) => { %>
+            <div class="item">
+              <i class="large calendar middle aligned icon"></i>
+              <div class="content">
+                <div class="header">
+                  <a href="/calendar/<%= collection.name %>&<%= collection.id %>"><%= collection.calender.name %> - Calendar</a>
+                </div>
+                <div class="ui horizontal bulleted link list">
+                  <a class="item">
+                    <div class="description"><%=collection.calender.events.length%> Events</div>
+                  </a>
+                  <a class="item">
+                    <%if(collection.calender.private===false){%>
+                      <div class="description"><i class="lock icon"></i>private</div>
+                    <%}else{%>
+                      <div class="description"><i class="unlock icon"></i>public</div>
+                    <%}%>
+                  </a>
+                </div>
+              </div>
+            </div>
+          <% }); %> 
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+        <div class="trend">
+          <h3 class="ui header">Trend</h3>
+          <p>추후 추가</p>
+        </div>
+      </div>
+  </div>
+</div>

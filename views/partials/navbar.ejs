@@ -1,0 +1,35 @@
+<div class="ui centered grid">
+    <div class="center aligned column">
+      <div class="ui stackable compact secondary menu">
+        <a class="item" href="/">
+          Home
+        </a>
+        <div class="right menu">
+          <div class="item" id="search-item">
+            <div class="ui icon input">
+              <input type="text" placeholder="Search...">
+              <i class="search link icon"></i>
+            </div>
+          </div>
+          <a class="item">
+            Explore
+          </a>
+          <a class="myaccount item">
+            <%=user.nick.toUpperCase();%>
+            <i class="dropdown icon"></i>
+          </a>
+          <div class="ui popup bottom left transition hidden">
+            <div class="ui relaxed divided grid">
+              <div class="column">
+                <h4 class="ui header"><%=user.nick.toUpperCase();%></h4>
+                <div class="ui link list">
+                  <a class="item" href="/auth/myaccount">My account</a>
+                  <a class="item" href="/auth/logout">logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>        
+    </div>
+</div>

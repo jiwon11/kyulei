@@ -1,0 +1,86 @@
+<div class="container-fluid h-100">
+    <div class="row justify-content-center mx-auto h-100">
+      <div class="col-md-2 sidebar">
+          <div class="ui vertical text menu">
+              <div class="header item">My Collections</div>
+              <% userCollectionList.forEach((collection) => { %>
+                  <a class="item" href="/collections/<%= collection.id %>">
+                    <%= collection.name %>
+                    <%//<div class="ui mini red basic label">1 +</div>%>
+                  </a>
+              <% }); %>
+              <button id="addCollecBtn" class="fluid ui mini button">
+                <i class="add icon"></i>
+                Collections
+              </button>
+              <div class="collectionName text-right" id="collectionName">
+                  <div class="collectionName input-group">
+                    <input type="text" class="form-control" placeholder="Name" id="colNameInp">
+                  </div>
+                  <div>
+                      <button class="ui mini green button" id="colNamePostBtn">OK</button>
+                      <button class="ui mini button" id="colNameCancelBtn">Cancel</button>
+                  </div>
+              </div>
+          </div>
+          <div class="ui vertical text menu">
+            <div class="header item">Canlendar</div>
+              <div class="ui calendar" id="today_calendar">
+                <div class="ui input left icon">
+                  <i class="calendar icon"></i>
+                  <input type="text" placeholder="Date" id="today_calender_inp">
+                </div>
+                <a class="item" href="/calendar/<%=collection.name%>&<%=collection.id%>">
+                  See more...
+                </a>
+              </div>
+          </div>
+          <div class="ui vertical accordion text menu">
+            <div class="active item">
+              <div class="active title">
+                <i class="dropdown icon"></i>
+                <b>Events</b>
+              </div>
+              <div class="active content">
+                <a class="item">
+                  event
+                </a>
+              </div>
+            </div>
+          </div>
+      </div>
+    <div class="col-md-6">
+        <div class="collection head">
+            <h2 class="ui header">
+                <div class="content"><a href="/collections/<%=collection.id%>"><%= collection.name%></a></div> - Calendar
+                <div class="ui basic secondary label">
+                  <i class="rocket icon"></i>
+                  Beta
+                </div>
+                <input type="hidden" value="<%=collection.id%>" id="collectionId">
+            </h2>
+            <div class="ui horizontal bulleted link list">
+              <a class="item">
+                <%if(collection.private===false){%>
+                  <div class="sub header"><i class="lock icon"></i>private</div>
+                <%}else{%>
+                  <div class="sub header"></div><i class="unlock icon"></i>public</div>
+                <%}%>
+                </a>
+              <a class="item">
+                  <%=calender.events.length%> Events
+              </a>
+            </div>
+          </div>
+          <div class="calenderArea">
+            <div id="calendar"></div>
+          </div>
+    </div>
+    <div class="col-md-2">
+        <div class="recommend">
+          <h3 class="ui header">Recommend Events</h3>
+          <p>추후 추가</p>
+        </div>
+    </div>
+  </div>
+</div>

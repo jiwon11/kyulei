@@ -1,0 +1,589 @@
+<script>
+$(window).resize(function(){
+  if($(window).width()>768) {
+  $(window).on('scroll touchmove mousewheel', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+  });
+  $("body").css("overflow","hidden");
+  $("html").css("overflow","hidden");
+}});
+
+$(window).resize(function(){
+  if($(window).width()<768) {
+    console.log($(window).width());
+    $(window).off('scroll touchmove mousewheel');
+    $("body").css("overflow","scroll");
+    $("html").css("overflow","scroll");
+  }});
+window.addEventListener("wheel", function(){
+  //pass
+});
+if(document.getElementById('postSeeMore')){
+  var page = 1;
+  document.getElementById('postSeeMore').addEventListener('click',function(){
+    page = page+1;
+    var collectionId = document.getElementById('collectionId').value;
+    $.ajax({
+      type: 'POST',
+      url: '/collections/'+collectionId+'/post/more/'+page,
+      success: function(response){
+        var posts = response.posts;
+        var postlist = document.getElementById('collectionPost').children[0];
+        console.log(postlist); 
+        posts.forEach((post) =>{
+          var posthtml = `
+          <div class="item">
+            <div class="ui small rounded image">
+              <img src="${post.image}" onerror="this.src='../image/loading.gif'">
+            </div>
+            <div class="content">
+              <a class="header" href="${post.url}" target="_blank">${post.title}</a>
+              <div class="extra">
+                <span class="site">${post.site}</span>
+              </div>
+              <div class="meta">
+                <span class="updated_time">${post.updated_time}</span>
+              </div>
+              <div class="description">
+                <p>${post.description.substring(0,300)}</p>
+              </div>
+            </div>
+          </div>
+            `;
+          postlist.insertAdjacentHTML('beforeend', posthtml);
+        })
+      },
+      error: function(err){
+          console.log(err);
+      }
+    });
+  }, false);
+}
+$('.ui.dropdown')
+  .dropdown();
+
+$('.ui.accordion')
+.accordion()
+;
+$('#selectTypeUrl')
+.dropdown({
+  placeholder: 'Select Type',
+  values: [
+    {
+      "name" : 'URL',
+      "value" : 'url',
+      "icon": "globe"
+      // Will be displayed as header
+    },{
+      "name" : 'RSS',
+      "value" : 'rss',
+      "icon" : "rss square",
+      // Will be displayed as header
+    },
+  ]
+});
+$('#edit_selectTypeUrl')
+.dropdown({
+  placeholder: 'Select Type',
+  values: [
+    {
+      "name" : 'URL',
+      "value" : 'url',
+      "icon": "globe"
+      // Will be displayed as header
+    },{
+      "name" : 'RSS',
+      "value" : 'rss',
+      "icon" : "rss square",
+      // Will be displayed as header
+    },
+  ]
+});
+
+$('.message .close')
+  .on('click', function() {
+    $(this)
+      .closest('.message')
+      .transition('fade')
+    ;
+  })
+;
+$('.menu .myaccount')
+  .popup({
+    inline     : true,
+    hoverable  : true,
+    position   : 'bottom left',
+  })
+;
+
+if(document.getElementById('AddwebsiteBtn')){
+  document.getElementById('AddwebsiteBtn').addEventListener('click',function(){
+    $('.ui.modal.addwebsite')
+    .modal('show')
+  ;
+  $(".ui.modal").modal({
+		closable: true
+	});
+  });
+}
+editSites_crawlset=Array.from(document.getElementsByClassName('editSite_crwalset'))
+editSites_crawlset.forEach(function(crawlset) {
+  crawlset.addEventListener('click', function(event){
+  event.preventDefault();
+  num = editSites_crawlset.indexOf(crawlset);
+  document.getElementById('modal_crwalsetId').value = document.getElementsByClassName('crwalset')[num].getElementsByClassName('crwalsetId')[0].value;
+  document.getElementById('edit_url').value= document.getElementsByClassName('crwalset')[num].getElementsByClassName('crwalsetUrl')[0].value;
+  document.getElementById('edit_selectorResult').value = document.getElementsByClassName('crwalset')[num].getElementsByClassName('crwalsetSelec')[0].value;
+  document.getElementById('edit_selectorLength').innerText = document.getElementById('edit_selectorResult').value.length;
+  $('#edit_selectTypeUrl').dropdown('set selected', 'url');
+  $('.modal.editsite')
+  .modal('show');
+  })
+})
+editSites_rss=Array.from(document.getElementsByClassName('editSite_rss'))
+editSites_rss.forEach(function(rss) {
+  rss.addEventListener('click', function(event){
+  event.preventDefault();
+  num = editSites_rss.indexOf(rss);
+  document.getElementById('modal_crwalsetId').value = document.getElementsByClassName('rssset')[num].getElementsByClassName('rsssetId')[0].value;
+  document.getElementById('edit_url').value= document.getElementsByClassName('rssset')[num].getElementsByClassName('rsssetUrl')[0].value;
+  document.getElementById('edit_selectorField').style.display = 'none';
+  $('#edit_selectTypeUrl').dropdown('set selected', 'rss');
+  $('.modal.editsite')
+  .modal('show');
+  })
+})
+
+$(".alert-danger").fadeTo(5000, 500).slideUp(100, function(){
+  $(".alert-danger").slideUp(1000);
+});
+if(document.getElementById('alertCloseBtn')){
+  document.getElementById('alertCloseBtn').addEventListener('click', function() {
+    $('.alert.alert-danger.alert-dismissible').alert('close');
+  });
+}
+
+if(document.getElementById('addCollecBtn')){
+  document.getElementById('addCollecBtn').addEventListener('click', function() {
+    var collectionName = document.getElementById('collectionName')
+    if(collectionName.style.display==='none'){
+      collectionName.style.display = 'inline';
+    } else {
+      collectionName.style.display = 'none';
+    }
+  });
+}
+
+var colNamePostBtn = document.getElementById('colNamePostBtn');
+if(colNamePostBtn){
+  colNamePostBtn.addEventListener('click', function() {
+    var colName = document.getElementById('colNameInp').value;
+    var data = {'colName' : colName};
+    data = JSON.stringify(data);
+    console.log(data);
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        location.reload();
+      } else {
+        console.error(xhr.responseText);
+      }
+    };
+    xhr.open('POST', '/collections/add');
+    xhr.setRequestHeader('Content-type', "application/json");
+    xhr.send(data);
+  });
+}
+var colNameCancelBtn = document.getElementById('colNameCancelBtn');
+if(colNameCancelBtn){
+  colNameCancelBtn.addEventListener('click', function() {
+    document.getElementById('colNameInp').value = '';
+  })
+}
+if(document.getElementById('InputSiteBtn')){
+  document.getElementById('InputSiteBtn').addEventListener('click', function(){
+    var urltype = $('#selectTypeUrl').dropdown('get value');
+    var url = document.getElementById('url').value;
+    var data = {'url' : url};
+    data = JSON.stringify(data);
+    // content-type을 설정하고 데이터 송신
+    var xhr = new XMLHttpRequest();
+    if(urltype ==='url'){
+      xhr.open('POST', '/crwalset/url');
+      xhr.setRequestHeader('Content-type', "application/json");
+      xhr.send(data);
+      // 데이터 수신이 완료되면 표시
+      xhr.addEventListener('load', function(){
+        var result = xhr.responseText;
+        var result = JSON.parse(xhr.responseText);
+        console.log(result);
+        // 데이터가 없으면 return 반환
+        // 데이터가 있으면 결과값 표시
+        if(result['status'] == 200){
+          document.getElementById('inputSite').style.display = 'block';
+          document.getElementById('url').value = result['url'];
+          var inputSiteIframe = document.getElementById('inputSite').contentWindow.document;
+          inputSiteIframe.open();
+          inputSiteIframe.write(result['body']);
+          inputSiteIframe.close();
+        }else{
+          document.getElementById('url').classList.add('error');
+          var errorwordtag = document.createElement("p");
+          var errorword = document.createTextNode("URL을 잘못 입력하였거나 해당 URL은 읽어올 수 없습니다.");
+          errorwordtag.appendChild(errorword);
+          document.getElementById('url').appendChild(errorwordtag);
+        }
+      });
+    }else {
+      document.getElementById('selectorField').style.display = 'none';
+      document.getElementById('selectorInspect').innerHTML = 'RSS Inspect';
+      xhr.open('POST', '/crwalset/rss');
+      xhr.setRequestHeader('Content-type', "application/json");
+      xhr.send(data);
+      xhr.addEventListener('load', function(){
+        var result = JSON.parse(xhr.responseText);
+        // 데이터가 없으면 return 반환
+        // 데이터가 있으면 결과값 표시
+        console.log(result['url']);
+        document.getElementById('selectorUrl').innerHTML = result['url'];
+        document.getElementById('selectorUrl').href = result['url'];
+        document.getElementById('InputSelecBtn').classList.remove("disabled");
+      });
+    }
+  });
+}
+
+if(document.getElementById("inputSite")){
+  document.getElementById("inputSite").onload = () => {
+    var iframeBound = document.getElementById("inputSite").getBoundingClientRect();
+    var linkList = document.getElementById("inputSite").contentWindow.document.querySelector('body').querySelectorAll('a');
+    for(var i=0; i<linkList.length;i++){
+      linkList[i].addEventListener('click', function(e){
+        e.preventDefault();
+      })
+    }
+    const inspector = new DomInspector({
+        // get iframe element by `contentWindow`
+        root: document.getElementById("inputSite").contentWindow.document.querySelector('body'),
+        theme: 'you-custom-theme-class'
+    });
+    inspector.enable();
+    document.getElementById('InputSelecCancelBtn').addEventListener('click', function(){
+      document.getElementById('selectorResult').value = '';
+      document.getElementById("inputSite").style.display = 'inline';
+      document.getElementById('selectorTitle').style.display = 'none';
+      inspector.enable();
+    });
+    document.getElementById("inputSite").contentWindow.document.querySelector('body').addEventListener('click', function(){
+      var selector = inspector.getSelector(inspector.target);
+      console.log(inspector.target.hasAttribute('class'));
+      //document.getElementsByClassName('resultInputArea')[0].style.display = 'inline';
+      document.getElementById('selectorResult').value = `${selector}`;
+      document.getElementById('selectorLength').innerText = document.getElementById('selectorResult').value.length;
+      if(document.getElementById('selectorResult').value.length>500){
+        document.getElementById('InputSelecBtn').classList.add("disabled");
+        document.getElementById('InputSelecBtn').classList.add("negative");
+      }
+      $("#selectorResult").change(function(){
+        document.getElementById('selectorLength').innerText = document.getElementById('selectorResult').value.length;
+        if(document.getElementById('selectorResult').value.length<500){
+          document.getElementById('InputSelecBtn').classList.remove("disabled");
+          document.getElementById('InputSelecBtn').classList.remove("negative");
+        }
+      });
+    });
+  }
+}
+
+if(document.getElementById('InputSelecBtn')){
+  document.getElementById('InputSelecBtn').addEventListener('click', function() {
+    var url = document.getElementById('url').value;
+    var selector = document.getElementById('selectorResult').value;
+    var collectionId = document.getElementById('collectionId').value;
+    var data = {
+      'url': url,
+      'selector': selector,
+      'collectionId': collectionId,
+    };
+    data = JSON.stringify(data);
+    // content-type을 설정하고 데이터 송신
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/crwalset/add');
+    xhr.setRequestHeader('Content-type', "application/json");
+    xhr.send(data);
+    // 데이터 수신이 완료되면 표시
+    xhr.addEventListener('load', function(){
+      location.reload();
+    });
+  });
+}
+if(document.getElementById('edit_InputSiteBtn')){
+  document.getElementById('edit_InputSiteBtn').addEventListener('click', function(){
+    // 입력값 위치를 찾아 변수에 담고
+    var urltype = $('#edit_selectTypeUrl').dropdown('get value');
+    console.log(urltype);
+    var url = document.getElementById('edit_url').value;
+    var data = {'url' : url};
+    data = JSON.stringify(data);
+    // content-type을 설정하고 데이터 송신
+    var xhr = new XMLHttpRequest();
+    if(urltype ==='url'){
+      xhr.open('POST', '/crwalset/url');
+      xhr.setRequestHeader('Content-type', "application/json");
+      xhr.send(data);
+      // 데이터 수신이 완료되면 표시
+      xhr.addEventListener('load', function(){
+        var result = xhr.responseText;
+        // 데이터가 없으면 return 반환
+        // 데이터가 있으면 결과값 표시
+        document.getElementById('edit_inputSite').style.display = 'block';
+        var inputSiteIframe = document.getElementById('edit_inputSite').contentWindow.document;
+        inputSiteIframe.open();
+        inputSiteIframe.write(result);
+        inputSiteIframe.close();
+      });
+    }else {
+      document.getElementById('edit_selectorField').style.display = 'none';
+      document.getElementById('edit_selectorInspect').innerHTML = 'RSS Inspect';
+      xhr.open('POST', '/crwalset/rss');
+      xhr.setRequestHeader('Content-type', "application/json");
+      xhr.send(data);
+      xhr.addEventListener('load', function(){
+        var result = JSON.parse(xhr.responseText);
+        // 데이터가 없으면 return 반환
+        // 데이터가 있으면 결과값 표시
+        console.log(result['url']);
+        document.getElementById('edit_selectorUrl').innerHTML = result['url'];
+        document.getElementById('edit_selectorUrl').href = result['url'];
+        document.getElementById('edit_InputSelecBtn').classList.remove("disabled");
+      });
+    }
+  });
+}
+if(document.getElementById("edit_inputSite")){
+  document.getElementById("edit_inputSite").onload = () => {
+    var iframeBound = document.getElementById("edit_inputSite").getBoundingClientRect();
+    var linkList = document.getElementById("edit_inputSite").contentWindow.document.querySelector('body').querySelectorAll('a');
+    for(var i=0; i<linkList.length;i++){
+      linkList[i].addEventListener('click', function(e){
+        e.preventDefault();
+      })
+    }
+    const inspector = new DomInspector({
+        // get iframe element by `contentWindow`
+        root: document.getElementById("edit_inputSite").contentWindow.document.querySelector('body'),
+        theme: 'you-custom-theme-class'
+    });
+    inspector.enable();
+    document.getElementById("edit_inputSite").contentWindow.document.querySelector('body').addEventListener('click', function(){
+      var selector = inspector.getSelector(inspector.target);
+      //document.getElementsByClassName('resultInputArea')[0].style.display = 'inline';
+      document.getElementById('edit_selectorResult').value = `${selector}`;
+      document.getElementById("edit_inputSite").style.display = 'none';
+      document.getElementById('edit_InputSelecCancelBtn').style.display = 'inline';
+      document.getElementById('edit_selectorLength').innerText = document.getElementById('edit_selectorResult').value.length;
+      if(document.getElementById('edit_selectorResult').value.length>500){
+        document.getElementById('edit_InputSelecBtn').classList.add("disabled");
+        document.getElementById('edit_InputSelecBtn').classList.add("negative");
+      }
+      $("#edit_selectorResult").change(function(){
+        document.getElementById('edit_selectorLength').innerText = document.getElementById('edit_selectorResult').value.length;
+        if(document.getElementById('edit_selectorResult').value.length>500){
+          document.getElementById('edit_InputSelecBtn').classList.add("disabled");
+          document.getElementById('edit_InputSelecBtn').classList.add("negative");
+        }
+        if(document.getElementById('edit_selectorResult').value.length<500){
+          document.getElementById('edit_InputSelecBtn').classList.remove("disabled");
+          document.getElementById('edit_InputSelecBtn').classList.remove("negative");
+        }
+      });
+      inspector.disable();
+      document.getElementById('edit_InputSelecCancelBtn').addEventListener('click', function(){
+        document.getElementById('edit_selectorResult').value = '';
+        document.getElementById("edit_inputSite").style.display = 'inline';
+        document.getElementById('edit_selectorTitle').style.display = 'none';
+        inspector.enable();
+      });
+    });
+  }
+}
+if(document.getElementById('edit_InputSelecBtn')){
+  document.getElementById('edit_InputSelecBtn').addEventListener('click', function() {
+    var url = document.getElementById('edit_url').value;
+    var selector = document.getElementById('edit_selectorResult').value;
+    var collectionId = document.getElementById('collectionId').value;
+    var crwalsetId = document.getElementById('modal_crwalsetId').value;
+    var data = {
+      'url': url,
+      'selector': selector,
+      'collectionId': collectionId,
+      'crwalsetId' : crwalsetId,
+    };
+    data = JSON.stringify(data);
+    // content-type을 설정하고 데이터 송신
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/crwalset/update');
+    xhr.setRequestHeader('Content-type', "application/json");
+    xhr.send(data);
+    // 데이터 수신이 완료되면 표시
+    xhr.addEventListener('load', function(){
+      location.reload();
+    });
+  });
+}
+if(document.getElementById('delcrawlset')){
+  var xhr = new XMLHttpRequest();
+  document.getElementById('delcrawlset').addEventListener('click', function(){
+    var urltype = $('#edit_selectTypeUrl').dropdown('get value');
+    console.log(urltype);
+    var crwalsetId = document.getElementById('modal_crwalsetId').value;
+    var collectionId = document.getElementById('collectionId').value;
+    var data = {
+      'collectionId': collectionId,
+      'crwalsetId' : crwalsetId,
+      'urltype': urltype,
+    };
+    data = JSON.stringify(data);
+    xhr.open('POST', '/crwalset/delete');
+    xhr.setRequestHeader('Content-type', "application/json");
+    xhr.send(data);
+  });
+  xhr.addEventListener('load', function(){
+    $('body').toast({
+      class: 'success',
+      message: '웹사이트 정보를 삭제하였습니다.',
+      closeOnClick: false,
+      showProgress: 'bottom',
+      actions: [{
+        text    : 'OK',
+        click   : function(){location.reload()},
+    }]
+    });
+  });
+}
+if(document.getElementById('edit_SelecInspect')){
+  document.getElementById('edit_SelecInspect').addEventListener('click',function(){
+    var xhr = new XMLHttpRequest();
+    var url = document.getElementById('edit_url').value;
+    var selector = document.getElementById('edit_selectorResult').value;
+    var data = {
+      'url' : url,
+      'selector': selector,
+    };
+    data = JSON.stringify(data);
+    // content-type을 설정하고 데이터 송신
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/crwalset/selectorInspect');
+    xhr.setRequestHeader('Content-type', "application/json");
+    xhr.send(data);
+    // 데이터 수신이 완료되면 표시
+    xhr.addEventListener('load', function(){
+      var result = JSON.parse(xhr.responseText);
+      if(result['url'] !== undefined){
+        console.log(result);
+        document.getElementById('edit_selectorUrl').innerHTML = result['url'];
+        document.getElementById('edit_selectorUrl').href = result['url'];
+        document.getElementById('edit_InputSelecBtn').classList.remove("disabled");
+      }
+      else{
+        console.log('no result');
+      }
+    });
+  })
+}
+if(document.getElementById('SelecInspect')){
+  document.getElementById('SelecInspect').addEventListener('click',function(){
+    var xhr = new XMLHttpRequest();
+    var url = document.getElementById('url').value;
+    var selector = document.getElementById('selectorResult').value;
+    var data = {
+      'url' : url,
+      'selector': selector,
+    };
+    data = JSON.stringify(data);
+    // content-type을 설정하고 데이터 송신
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/crwalset/selectorInspect');
+    xhr.setRequestHeader('Content-type', "application/json");
+    xhr.send(data);
+    // 데이터 수신이 완료되면 표시
+    xhr.addEventListener('load', function(){
+      var result = JSON.parse(xhr.responseText);
+      if(result['url'] !== undefined){
+        console.log(result);
+        document.getElementById('selectorUrl').href = result['url'];
+        document.getElementById('selectorUrl').innerHTML = result['url'];
+        document.getElementById('InputSelecBtn').classList.remove("disabled");
+      }
+      else{
+        console.log('no result');
+      }
+    });
+  })
+}
+$('#today_calendar')
+  .calendar({
+    monthFirst: false,
+    type: 'date',
+    formatter: {
+      date: function (date, settings) {
+        if (!date) return '';
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        return year + '-' + month + '-' + day;
+      }
+    }
+  })
+;
+var date = new Date();
+var day = date.getDate();
+var month = date.getMonth() + 1;
+var year = date.getFullYear();
+today= year + '-' + month + '-' + day;
+if(document.getElementById('today_calender_inp')){
+  document.getElementById('today_calender_inp').value = today;
+}
+if(document.getElementById('calendar')){
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      timeZone: 'UTC',
+      navLinks: true,
+      height: 650,
+      themeSystem: 'lux',
+      plugins: [ 'interaction', 'dayGrid', 'timeGrid','list', ],
+      defaultView: 'dayGridMonth',
+      navLinks: true,
+      defaultDate: new Date(),
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+      },
+      //events: 'https://fullcalendar.io/demo-events.json'
+    });
+    calendar.render();
+  });
+}
+var error_mes = Array.from(document.getElementsByClassName('ui negative icon message'));
+error_mes.forEach((error)=>{
+  error.getElementsByClassName('close icon')[0].addEventListener('click', function(){
+    var errorId = error.getElementsByClassName('errorId')[0].value;
+    var collectionId = document.getElementById('collectionId').value;
+    $.ajax({
+      type: 'DELETE',
+      url: '/collections/error/delete/'+errorId,
+      success: function(response){
+          console.log('close error Message');
+          window.location = '/collections/'+collectionId;
+      },
+      error: function(err){
+          console.log(err);
+      }
+    });
+  });
+});
+</script>

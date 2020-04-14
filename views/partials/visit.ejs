@@ -1,0 +1,50 @@
+<div class="container h-100">
+  <div class="row h-100">
+    <div class="col-sm-6">
+      <!--img src="/image/Macbook.png" class="mockup">-->
+    </div>
+    <div class="col-sm-6 h-100">
+      <div class="right-column text-center">
+        <h1>NETRIGGER</h1>
+          <p class="info">Sign up to see photo and videos form your friends.</p>
+          <button type="submit" class="btn btn-primary btn-lg btn-block facebook-login"><i class="facebook square icon"></i>Login with Facebook</button>
+          <p class="or">OR</p>
+        <form class="contact-form" action="/auth/join" method="POST">
+          <div class="form-group">
+            <input type="email" name="email" class="form-control" placeholder="Email">
+          </div>
+          <div class="form-group">
+            <input type="text" name="nick" class="form-control" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <input type="password" name="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="form-group row" id="gender-radio">
+            <label for="gender-input" class="col-3 col-form-label">Gender</label>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" name="gender" type="radio" value="male"> Male
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" name="gender" type="radio" value="female"> Female
+              </label>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="date-input" class="col-3 col-form-label">Birthday</label>
+            <div class="col-9">
+              <input class="form-control" name="birthday" type="date" value="" id="date-input">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Sign up</button>
+        </form>
+        <p class="terms">By signing up, you agree to our <b>Terms, Data Policy</b> and <b>Cookies Policy</b>.</p>
+      </div>
+      <div class="right-column-login text-center">
+        <p>Have an account?<a href="/login"> Login</a></p>
+      </div>
+    </div>
+  </div>
+</div>

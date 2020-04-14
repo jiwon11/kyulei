@@ -1,0 +1,57 @@
+<div class="ui fullscreen modal editsite">
+    <i class="close icon"></i>
+    <div class="header">
+      Edit Site
+    </div>
+    <div class="content">
+      <div class="row mx-auto">
+        <div class="col-md-9 col-md-push-3">
+            <iframe id="edit_inputSite" sandbox="allow-same-origin">
+  
+            </iframe>
+        </div>
+        <div class="col-md-3 col-md-pull-9 websiteInfor">
+          <div class="description">
+              <div class="ui form">
+                  <div class="field">
+                    <label>URL</label>
+                    <div class="ui left action left input">
+                      <div class="ui basic floating dropdown button" id="edit_selectTypeUrl">
+                        <div class="text"></div>
+                        <i class="dropdown icon"></i>
+                      </div>
+                      <input id="edit_url" name="url" type="text" placeholder="URL"/>
+                    </div>
+                    <input class="ui mini right floated compact button" id="edit_InputSiteBtn" type="button" value="Input site"/>
+                    <input id="modal_crwalsetId" value='' type="hidden"/>
+                  </div>
+                  <div class="field" id="edit_selectorField">
+                      <label>Selector <span id="edit_selectorLength"></span>/500</label>
+                      <textarea id="edit_selectorResult" name="selector" rows="2" placeholder=""></textarea>
+                      <input class="ui mini right floated compact button" id="edit_SelecInspect" type="button" value="Inspect"/>
+                  </div>
+                  <div class="field" id="edit_selectorInspectField">
+                    <label id="edit_selectorInspect">Selector Inspect</label>
+                    <!--
+                    <div>
+                      <label>Title</label> : <span id="edit_selectorTitle"></span>
+                    </div>
+                    -->
+                    <div>
+                      <label>Url</label> : <a target="_blank" id="edit_selectorUrl"></a>
+                    </div>
+                  </div>
+                  <input class="ui mini right floated compact button" id="edit_InputSelecCancelBtn" type="button" value="Cancel"/>
+                  <input class="ui mini right floated compact disabled button" id="edit_InputSelecBtn" type="submit" value="OK"/>
+                  <div class="field">
+                    <label>Delete</label>
+                    <button class="ui icon button" tabindex="0" id="delcrawlset">
+                      <i class="trash icon"></i>
+                    </button>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
