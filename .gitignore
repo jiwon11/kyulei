@@ -1,4 +1,5 @@
 *.env
+*.jshintrc
 .vscode/
 config/
 node_modules
