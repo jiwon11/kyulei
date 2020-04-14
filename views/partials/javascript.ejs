@@ -336,13 +336,27 @@ if(document.getElementById('edit_InputSiteBtn')){
       // 데이터 수신이 완료되면 표시
       xhr.addEventListener('load', function(){
         var result = xhr.responseText;
+        console.log(result);
         // 데이터가 없으면 return 반환
         // 데이터가 있으면 결과값 표시
-        document.getElementById('edit_inputSite').style.display = 'block';
-        var inputSiteIframe = document.getElementById('edit_inputSite').contentWindow.document;
-        inputSiteIframe.open();
-        inputSiteIframe.write(result);
-        inputSiteIframe.close();
+        var result = JSON.parse(xhr.responseText);
+        console.log(result);
+        // 데이터가 없으면 return 반환
+        // 데이터가 있으면 결과값 표시
+        if(result['status'] == 200){
+          document.getElementById('edit_inputSite').style.display = 'block';
+          document.getElementById('edit_url').value = result['url'];
+          var inputSiteIframe = document.getElementById('edit_inputSite').contentWindow.document;
+          inputSiteIframe.open();
+          inputSiteIframe.write(result['body']);
+          inputSiteIframe.close();
+        }else{
+          document.getElementById('edit_url').classList.add('error');
+          var errorwordtag = document.createElement("p");
+          var errorword = document.createTextNode("URL을 잘못 입력하였거나 해당 URL은 읽어올 수 없습니다.");
+          errorwordtag.appendChild(errorword);
+          document.getElementById('edit_url').appendChild(errorwordtag);
+        }
       });
     }else {
       document.getElementById('edit_selectorField').style.display = 'none';
