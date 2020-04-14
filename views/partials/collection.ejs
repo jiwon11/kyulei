@@ -144,10 +144,10 @@
         <%}%>
         <% if(posts.length>0){ %>
         <div class="collection post" id="collectionPost">
-            <div class="ui divided items">
+            <div class="ui divided items" id='collectionItems'>
               <% posts.forEach((post) => { %>
                 <div class="item">
-                  <div class="ui small rounded image">
+                  <div class="ui tiny rounded image">
                     <img src="<%=post.image%>" onerror="this.src='../image/loading.gif'">
                   </div>
                   <div class="content">
@@ -159,7 +159,7 @@
                       <span class="updated_time"><%=post.updated_time%></span>
                     </div>
                     <div class="description">
-                      <p><%=post.description.substring(0,300)%></p>
+                      <p><%=post.description.substring(0,100)%></p>
                     </div>
                   </div>
                 </div>

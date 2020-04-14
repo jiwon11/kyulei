@@ -17,8 +17,7 @@ h1{
 }
 */
 body, html {
-    height:100%; 
-    min-height:100%; 
+    height:110%; 
     overflow:hidden;
     touch-action:none;
 }
@@ -129,7 +128,7 @@ button img{
     margin-top: 20px;
 }
 .col-sm-6 {
-    max-width: 100%!important;
+    height: 90%;
 }
 .ui.compact.secondary.menu {
     padding: 20px 0 10px 0!important;
@@ -144,7 +143,7 @@ button img{
     padding-bottom: 0!important;
 }
 .ui.centered.grid {
-    padding-bottom: 50px;
+    padding-bottom: 30px;
 }
 .right-column{
     background: #fff;
@@ -313,8 +312,15 @@ h5.ui.header{
 a:link { color: black; text-decoration: none;}
 a:visited { color: black; text-decoration: none;}
 #postSeeMore{
-    margin-top: 10px!important;
+    margin-top: 5px!important;
 }
 #postSeeMore:hover {
     background: #e6e6e6;
+}
+
+#collectionPost{
+    padding-bottom: 10px!important;
+}
+#collectionItems{
+    margin-bottom: 5px;
 }
