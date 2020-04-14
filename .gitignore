@@ -1,4 +1,4 @@
 *.env
-/.vscode
-/.config
-/node_modules
+.vscode/
+config/
+node_modules
