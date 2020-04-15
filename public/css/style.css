@@ -1,6 +1,7 @@
 ::-webkit-scrollbar {
     display:none;
     } 
+
 *{
     margin: 0;
     padding: 0;
@@ -17,7 +18,7 @@ h1{
 }
 */
 body, html {
-    height:110%; 
+    height:90%; 
     overflow:hidden;
     touch-action:none;
 }
@@ -260,8 +261,14 @@ h5.ui.header{
     margin: 0px 15px 0px 0px;
 }
 .urlarea{
-    overflow: auto;
+    overflow-x:scroll;
+    overflow-y: hidden;
     white-space: nowrap;
+}
+.collection.head:hover .urlarea::-webkit-scrollbar{
+    display: block;
+    height: 3px;
+    background: none;
 }
 #AddwebsiteBtn{
     display: inline;
@@ -272,7 +279,7 @@ h5.ui.header{
 
 .collection.post{
     background: #fff;
-    height: 720px;
+    height: 710px;
     border: 1px solid #e6e6e6;
     margin: 10px;
     padding: 20px;
