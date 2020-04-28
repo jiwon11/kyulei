@@ -187,7 +187,7 @@ router.post('/selectorInspect', isLoggedIn, async(req, res, next) => {
         console.log(lists);
         var crawl_url = lists[0].url;
         console.log(crawl_url);
-        if(urlParsedObj.protocol ==='https' || urlParsedObj.protocol ==='http'){
+        if(urlParsedObj.protocol ==='https:' || urlParsedObj.protocol ==='http:'){
             res.json({
                 'url' : crawl_url,
                 });
