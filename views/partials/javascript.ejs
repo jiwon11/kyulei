@@ -336,7 +336,6 @@ if(document.getElementById('edit_InputSiteBtn')){
       // 데이터 수신이 완료되면 표시
       xhr.addEventListener('load', function(){
         var result = xhr.responseText;
-        console.log(result);
         // 데이터가 없으면 return 반환
         // 데이터가 있으면 결과값 표시
         var result = JSON.parse(xhr.responseText);
@@ -377,50 +376,53 @@ if(document.getElementById('edit_InputSiteBtn')){
   });
 }
 if(document.getElementById("edit_inputSite")){
-  document.getElementById("edit_inputSite").onload = () => {
-    var iframeBound = document.getElementById("edit_inputSite").getBoundingClientRect();
-    var linkList = document.getElementById("edit_inputSite").contentWindow.document.querySelector('body').querySelectorAll('a');
-    for(var i=0; i<linkList.length;i++){
-      linkList[i].addEventListener('click', function(e){
-        e.preventDefault();
-      })
-    }
-    const inspector = new DomInspector({
-        // get iframe element by `contentWindow`
-        root: document.getElementById("edit_inputSite").contentWindow.document.querySelector('body'),
-        theme: 'you-custom-theme-class'
-    });
-    inspector.enable();
-    document.getElementById("edit_inputSite").contentWindow.document.querySelector('body').addEventListener('click', function(){
-      var selector = inspector.getSelector(inspector.target);
-      //document.getElementsByClassName('resultInputArea')[0].style.display = 'inline';
-      document.getElementById('edit_selectorResult').value = `${selector}`;
-      document.getElementById("edit_inputSite").style.display = 'none';
-      document.getElementById('edit_InputSelecCancelBtn').style.display = 'inline';
-      document.getElementById('edit_selectorLength').innerText = document.getElementById('edit_selectorResult').value.length;
-      if(document.getElementById('edit_selectorResult').value.length>500){
-        document.getElementById('edit_InputSelecBtn').classList.add("disabled");
-        document.getElementById('edit_InputSelecBtn').classList.add("negative");
+  if(document.getElementById("edit_inputSite").contentWindow.document){
+    document.getElementById("edit_inputSite").onload = () => {
+      var iframeBound = document.getElementById("edit_inputSite").getBoundingClientRect();
+      var linkList = document.getElementById("edit_inputSite").contentWindow.document.querySelector('body').querySelectorAll('a');
+      for(var i=0; i<linkList.length;i++){
+        linkList[i].addEventListener('click', function(e){
+          e.preventDefault();
+        })
       }
-      $("#edit_selectorResult").change(function(){
+      const inspector = new DomInspector({
+          // get iframe element by `contentWindow`
+          root: document.getElementById("edit_inputSite").contentWindow.document.querySelector('body'),
+          theme: 'you-custom-theme-class'
+      });
+      inspector.enable();
+      document.getElementById("edit_inputSite").contentWindow.document.querySelector('body').addEventListener('click', function(){
+        var selector = inspector.getSelector(inspector.target);
+        console.log(selector);
+        //document.getElementsByClassName('resultInputArea')[0].style.display = 'inline';
+        document.getElementById('edit_selectorResult').value = `${selector}`;
+        document.getElementById("edit_inputSite").style.display = 'none';
+        document.getElementById('edit_InputSelecCancelBtn').style.display = 'inline';
         document.getElementById('edit_selectorLength').innerText = document.getElementById('edit_selectorResult').value.length;
         if(document.getElementById('edit_selectorResult').value.length>500){
           document.getElementById('edit_InputSelecBtn').classList.add("disabled");
           document.getElementById('edit_InputSelecBtn').classList.add("negative");
         }
-        if(document.getElementById('edit_selectorResult').value.length<500){
-          document.getElementById('edit_InputSelecBtn').classList.remove("disabled");
-          document.getElementById('edit_InputSelecBtn').classList.remove("negative");
-        }
+        $("#edit_selectorResult").change(function(){
+          document.getElementById('edit_selectorLength').innerText = document.getElementById('edit_selectorResult').value.length;
+          if(document.getElementById('edit_selectorResult').value.length>500){
+            document.getElementById('edit_InputSelecBtn').classList.add("disabled");
+            document.getElementById('edit_InputSelecBtn').classList.add("negative");
+          }
+          if(document.getElementById('edit_selectorResult').value.length<500){
+            document.getElementById('edit_InputSelecBtn').classList.remove("disabled");
+            document.getElementById('edit_InputSelecBtn').classList.remove("negative");
+          }
+        });
+        inspector.disable();
+        document.getElementById('edit_InputSelecCancelBtn').addEventListener('click', function(){
+          document.getElementById('edit_selectorResult').value = '';
+          document.getElementById("edit_inputSite").style.display = 'inline';
+          //document.getElementById('edit_selectorTitle').style.display = 'none';
+          inspector.enable();
+        });
       });
-      inspector.disable();
-      document.getElementById('edit_InputSelecCancelBtn').addEventListener('click', function(){
-        document.getElementById('edit_selectorResult').value = '';
-        document.getElementById("edit_inputSite").style.display = 'inline';
-        document.getElementById('edit_selectorTitle').style.display = 'none';
-        inspector.enable();
-      });
-    });
+    }
   }
 }
 if(document.getElementById('edit_InputSelecBtn')){
